@@ -13,31 +13,37 @@ class Cell:
         self._x2 = x2
         self._y2 = y2
         self._win = win
+        self.length_vertical = self._y2 - self._y1
+        self.length_horizontal = self._x2 - self._x1
+        self.center = Point(
+            self._x1 + self.length_horizontal / 2, self._y1 + self.length_vertical / 2
+        )
 
     def draw(self):
-        length_vertical = self._y2 - self._y1
-        length_horizontal = self._x2 - self._x1
-
         if self.has_left_wall:
             p1 = Point(self._x1, self._y1)
-            p2 = Point(self._x1, self._y1 + length_vertical)
+            p2 = Point(self._x1, self._y1 + self.length_vertical)
             line = Line(p1, p2)
             self._win.draw_line(line, "black")
 
         if self.has_right_wall:
             p1 = Point(self._x2, self._y2)
-            p2 = Point(self._x2, self._y2 - length_vertical)
+            p2 = Point(self._x2, self._y2 - self.length_vertical)
             line = Line(p1, p2)
             self._win.draw_line(line, "black")
 
         if self.has_top_wall:
             p1 = Point(self._x1, self._y1)
-            p2 = Point(self._x1 + length_horizontal, self._y1)
+            p2 = Point(self._x1 + self.length_horizontal, self._y1)
             line = Line(p1, p2)
             self._win.draw_line(line, "black")
 
         if self.has_bottom_wall:
             p1 = Point(self._x2, self._y2)
-            p2 = Point(self._x2 - length_horizontal, self._y2)
+            p2 = Point(self._x2 - self.length_horizontal, self._y2)
             line = Line(p1, p2)
             self._win.draw_line(line, "black")
+
+    def draw_move(self, to_cell, undo=False) -> None:
+        line = Line(self.center, to_cell.center)
+        self._win.draw_line(line, "gray" if undo else "red")

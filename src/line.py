@@ -13,9 +13,6 @@ class Line:
         self.point2 = point2
 
     def draw(self, canvas: Canvas, fill_color):
-        if fill_color != "black" and fill_color != "red":
-            raise ValueError("fill_color can be only black or red")
-
         canvas.create_line(
             self.point1.x,
             self.point1.y,
