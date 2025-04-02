@@ -20,38 +20,91 @@ class Maze:
             random.seed(seed)
 
     def solve(self):
+        print("\n-----")
+        print("SOLVING THE MAZE")
+        print("-----\n")
         self._solve_r()
 
     def _solve_r(self, i=0, j=0):
         self._animate()
         current_cell: Cell = self._cells[i][j]
         current_cell.visited = True
-        directions = [(i - 1, j), (i, j - 1), (i, j + 1), (i + 1, j)]
-        left, top, bottom, right = directions
+        print(f"Current cell:{current_cell} at position {i}:{j}")
+
+        left = (i - 1, j)
+        right = (i + 1, j)
+        top = (i, j - 1)
+        bottom = (i, j + 1)
+
+        directions = []
+        if i - 1 >= 0:
+            directions.append(left)
+        if j - 1 >= 0:
+            directions.append(top)
+        if i + 1 < len(self._cells):
+            directions.append(right)
+        if j + 1 < len(self._cells[i]):
+            directions.append(bottom)
 
         if current_cell is self._cells[-1][-1]:
             return True
 
         for dir in directions:
             next_cell = self._cells[dir[0]][dir[1]]
+            print(f"Potential next cell:{next_cell} at position {dir[0]}:{dir[1]}")
 
             if next_cell and not next_cell.visited:
-                if dir == left:
-                    if not next_cell.has_right_wall:
-                        current_cell.draw_move(next_cell)
-                if dir == right:
-                    if not next_cell.has_left_wall:
-                        current_cell.draw_move(next_cell)
-                if dir == top:
-                    if not next_cell.has_bottom_wall:
-                        current_cell.draw_move(next_cell)
-                if dir == bottom:
-                    if not next_cell.has_top_wall:
-                        current_cell.draw_move(next_cell)
-                if self._solve_r(dir[0], dir[1]):
-                    return True
-            else:
-                current_cell.draw_move(next_cell, True)
+                if dir == right and not current_cell.has_right_wall:
+                    current_cell.draw_move(next_cell)
+                    if self._solve_r(dir[0], dir[1]):
+                        return True
+                    else:
+                        current_cell.draw_move(next_cell, True)
+
+                if dir == left and not current_cell.has_left_wall:
+                    current_cell.draw_move(next_cell)
+                    if self._solve_r(dir[0], dir[1]):
+                        return True
+                    else:
+                        current_cell.draw_move(next_cell, True)
+
+                if dir == top and not current_cell.has_top_wall:
+                    current_cell.draw_move(next_cell)
+                    if self._solve_r(dir[0], dir[1]):
+                        return True
+                    else:
+                        current_cell.draw_move(next_cell, True)
+
+                if dir == bottom and not current_cell.has_bottom_wall:
+                    current_cell.draw_move(next_cell)
+                    if self._solve_r(dir[0], dir[1]):
+                        return True
+                    else:
+                        current_cell.draw_move(next_cell, True)
+
+        return False
+
+        # if next_cell and not next_cell.visited:
+        #     if dir == left:
+        #         if not next_cell.has_right_wall:
+        #             print(f"Draw a line from {current_cell} to {next_cell}")
+        #             current_cell.draw_move(next_cell)
+        #     if dir == right:
+        #         if not next_cell.has_left_wall:
+        #             print(f"Draw a line from {current_cell} to {next_cell}")
+        #             current_cell.draw_move(next_cell)
+        #     if dir == top:
+        #         if not next_cell.has_bottom_wall:
+        #             print(f"Draw a line from {current_cell} to {next_cell}")
+        #             current_cell.draw_move(next_cell)
+        #     if dir == bottom:
+        #         if not next_cell.has_top_wall:
+        #             print(f"Draw a line from {current_cell} to {next_cell}")
+        #             current_cell.draw_move(next_cell)
+        #     if self._solve_r(dir[0], dir[1]):
+        #         return True
+        #     print(f"Go back from {current_cell} to {next_cell}")
+        #     next_cell.draw_move(current_cell, True)
 
         return False
 
