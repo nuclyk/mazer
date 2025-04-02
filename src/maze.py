@@ -84,30 +84,6 @@ class Maze:
 
         return False
 
-        # if next_cell and not next_cell.visited:
-        #     if dir == left:
-        #         if not next_cell.has_right_wall:
-        #             print(f"Draw a line from {current_cell} to {next_cell}")
-        #             current_cell.draw_move(next_cell)
-        #     if dir == right:
-        #         if not next_cell.has_left_wall:
-        #             print(f"Draw a line from {current_cell} to {next_cell}")
-        #             current_cell.draw_move(next_cell)
-        #     if dir == top:
-        #         if not next_cell.has_bottom_wall:
-        #             print(f"Draw a line from {current_cell} to {next_cell}")
-        #             current_cell.draw_move(next_cell)
-        #     if dir == bottom:
-        #         if not next_cell.has_top_wall:
-        #             print(f"Draw a line from {current_cell} to {next_cell}")
-        #             current_cell.draw_move(next_cell)
-        #     if self._solve_r(dir[0], dir[1]):
-        #         return True
-        #     print(f"Go back from {current_cell} to {next_cell}")
-        #     next_cell.draw_move(current_cell, True)
-
-        return False
-
     def break_walls_r(self, i, j):
         current: Cell = self._cells[i][j]
         current.visited = True
@@ -206,7 +182,7 @@ class Maze:
         if self._win is None:
             return
         self._win.redraw()
-        time.sleep(0.1)
+        time.sleep(0.005)
 
     def _break_entrance_and_exit(self):
         if self._win is None:
