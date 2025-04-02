@@ -19,9 +19,46 @@ class Maze:
         if seed is not None:
             random.seed(seed)
 
+    def solve(self):
+        self._solve_r()
+
+    def _solve_r(self, i=0, j=0):
+        self._animate()
+        current_cell: Cell = self._cells[i][j]
+        current_cell.visited = True
+        directions = [(i - 1, j), (i, j - 1), (i, j + 1), (i + 1, j)]
+        left, top, bottom, right = directions
+
+        if current_cell is self._cells[-1][-1]:
+            return True
+
+        for dir in directions:
+            next_cell = self._cells[dir[0]][dir[1]]
+
+            if next_cell and not next_cell.visited:
+                if dir == left:
+                    if not next_cell.has_right_wall:
+                        current_cell.draw_move(next_cell)
+                if dir == right:
+                    if not next_cell.has_left_wall:
+                        current_cell.draw_move(next_cell)
+                if dir == top:
+                    if not next_cell.has_bottom_wall:
+                        current_cell.draw_move(next_cell)
+                if dir == bottom:
+                    if not next_cell.has_top_wall:
+                        current_cell.draw_move(next_cell)
+                if self._solve_r(dir[0], dir[1]):
+                    return True
+            else:
+                current_cell.draw_move(next_cell, True)
+
+        return False
+
     def break_walls_r(self, i, j):
         current: Cell = self._cells[i][j]
         current.visited = True
+        print(f"Current cell: {current} at position {i}:{j}")
 
         while True:
             to_visit = []
@@ -54,14 +91,13 @@ class Maze:
             # print(item)
             if len(to_visit) == 0:
                 self._draw_cell(i, j)
-                print("end")
                 return
             else:
                 random_number = random.randrange(0, len(to_visit))
                 direction = to_visit[random_number]
                 column, row = direction
-                print(f"direction: {direction}")
                 next_cell = self._cells[column][row]
+                print(f"Next cell: {next_cell} at position {column}:{row}")
 
                 if column < i and row == j:
                     current.has_left_wall = False
@@ -80,6 +116,11 @@ class Maze:
 
         # [i-1, j], [i, j-1], [i, j+1], [i+1, j]
         #
+
+    def _reset_cells_visited(self):
+        for i in range(len(self._cells)):
+            for cell in self._cells[i]:
+                cell.visited = False
 
     def _create_cells(self):
         for column in range(self._num_cols):
@@ -112,7 +153,7 @@ class Maze:
         if self._win is None:
             return
         self._win.redraw()
-        time.sleep(0.05)
+        time.sleep(0.1)
 
     def _break_entrance_and_exit(self):
         if self._win is None:

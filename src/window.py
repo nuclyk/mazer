@@ -1,4 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
+import tkinter
 from line import Line, Point
 
 
@@ -9,6 +10,7 @@ class Window:
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.canvas = Canvas(width=width, height=height)
         self.canvas.pack()
+        self.canvas.configure(background="white")
         self.running = False
         self.center_screen(width, height)
 

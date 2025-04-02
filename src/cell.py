@@ -36,7 +36,7 @@ class Cell:
         if self.has_left_wall:
             self._win.draw_line(line, "black")
             # draw a text with cell id for debugging
-            self._win.canvas.create_text(self.center.x, self.center.y, text=self.id)
+            # self._win.canvas.create_text(self.center.x, self.center.y, text=self.id)
         else:
             self._win.draw_line(line, "white")
 
